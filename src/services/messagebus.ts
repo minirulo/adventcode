@@ -8,9 +8,9 @@ export default class MessageBus {
     private readonly handlers:  { [key: string]: Handler };
     private readonly parser: IParser;
 
-    constructor(commandHandlers: { [key: string]: Handler } = HANDLERS){
+    constructor(parser: IParser = new FileParser(), commandHandlers: { [key: string]: Handler } = HANDLERS){
         this.handlers = commandHandlers;
-        this.parser = new FileParser();
+        this.parser = parser;
     }
 
     public handle(command: Command): string | number {

@@ -2,6 +2,20 @@ import { FileParser } from "@adapters/impl/file_parser";
 import { Stack, Transaction } from "@domain/stack";
 import { readFileSync } from "fs";
 
+describe("Test Day 1 - Elf Duty parser", () => {
+    it("Test adapters parse input", async () => {
+        const supplies = [
+            { calories: 6000 },
+            { calories: 4000 },
+            { calories: 11000 },
+            { calories: 24000 },
+            { calories: 10000 }
+        ];
+        const stream =  readFileSync("tests/dummy_data/example_supply.txt", "utf8");
+        expect(await FileParser.parseDutyFile(stream)).toEqual({elfSupplies: supplies });
+    })
+});
+
 describe("Test Day 4 - Elf Duty parser", () => {
     it("Test adapters parse input", async () => {
         const duties = [
@@ -12,7 +26,7 @@ describe("Test Day 4 - Elf Duty parser", () => {
             [6, 6, 4, 6],
             [2, 6, 4, 8]
         ];
-        const stream =  readFileSync("tests/integration/example_duty.txt", "utf8");
+        const stream =  readFileSync("tests/dummy_data/example_duty.txt", "utf8");
         expect(await FileParser.parseDutyFile(stream)).toEqual({"elfDuties": duties });
     })
 });
@@ -32,7 +46,7 @@ describe("Test Day 5 - Warehouse parser", () => {
             {numberOfCrates: 1, origin: stacks[0], destination: stacks[1] }
         ]
 
-        const stream =  readFileSync("tests/integration/example_warehouse.txt", "utf8");
+        const stream =  readFileSync("tests/dummy_data/example_warehouse.txt", "utf8");
         expect(await FileParser.parseStackFile(stream)).toEqual({"stacks": stacks, "transactions": transactions});
     })
 });

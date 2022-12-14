@@ -19,11 +19,16 @@
   ],
   "tags": [
     {
-      "name": "test"
+      "name": "elf_supply",
+      "description": "Check how many calories do the elves transport",
+      "externalDocs": {
+        "description": "Puzzle",
+        "url": "https://adventofcode.com/2022/day/1"
+      }
     },
     {
       "name": "elf_duty",
-      "description": "Check how many duties overlap when the elfs pair with each other",
+      "description": "Check how many duties overlap when the elves pair with each other",
       "externalDocs": {
         "description": "Puzzle",
         "url": "https://adventofcode.com/2022/day/4"
@@ -47,18 +52,18 @@
     }
   ],
   "paths": {
-    "/api/v1/elfs/{overlap}": {
+    "/api/v1/supplies/{elves}": {
       "post": {
         "tags": [
-          "elf_duty"
+          "elf_supply"
         ],
         "parameters": [
           {
-            "name": "overlap",
+            "name": "elves",
             "in": "path",
-            "description": "Whether to check for fully overlapped duties [true] or not [anything else]",
+            "description": "Top number of elves to get the calories from.",
             "required": false,
-            "default": "true",
+            "default": 1,
             "schema": {
               "type": "string"
             }
@@ -80,7 +85,49 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Overlap"
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/elves/{overlap}": {
+      "post": {
+        "tags": [
+          "elf_duty"
+        ],
+        "parameters": [
+          {
+            "name": "overlap",
+            "in": "path",
+            "description": "Whether to check for fully overlapped duties [true] or not [anything else]",
+            "required": false,
+            "default": "true",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
                 }
               }
             }
@@ -122,7 +169,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Crates"
+                  "$ref": "#/components/schemas/Result"
                 }
               }
             }
@@ -164,7 +211,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ParsedPosition"
+                  "$ref": "#/components/schemas/Result"
                 }
               }
             }
@@ -175,34 +222,10 @@
   },
   "components": {
     "schemas": {
-      "Overlap": {
+      "Result": {
         "type": "object",
         "properties": {
-          "result": {
-            "type": "integer",
-            "format": "int64",
-            "description": "Number of overlapped duties"
-          }
-        }
-      },
-      "Crates": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "string",
-            "description": "Last crates order after transactions",
-            "example": "ACPBDF"
-          }
-        }
-      },
-      "ParsedPosition": {
-        "type": "object",
-        "properties": {
-          "result": {
-            "type": "integer",
-            "format": "int64",
-            "description": "Position of the unique chain in message"
-          }
+          "result": { }
         }
       }
     }

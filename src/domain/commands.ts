@@ -4,12 +4,22 @@ export interface Command {
     stream: string;
 }
 
-export class ParseMessage implements Command {
-    public readonly numberOfCharacters: number;
+export class CheckElfSupplies implements Command {
+    public readonly numberOfElves: number;
     public readonly stream: string;
 
-    constructor(characters: number, message: string){
-        this.numberOfCharacters = characters;
+    constructor(elves = 1, message: string){
+        this.numberOfElves = elves;
+        this.stream = message;
+    }
+}
+
+export class CheckElfDuties implements Command {
+    public readonly fullyOverlap: boolean;
+    public readonly stream: string;
+
+    constructor(fullyOverlap: boolean, message: string){
+        this.fullyOverlap =fullyOverlap;
         this.stream = message;
     }
 }
@@ -28,12 +38,12 @@ export class MoveCrates implements Command {
     }
 }
 
-export class CheckElfDuties implements Command {
-    public readonly fullyOverlap: boolean;
+export class ParseMessage implements Command {
+    public readonly numberOfCharacters: number;
     public readonly stream: string;
 
-    constructor(fullyOverlap: boolean, message: string){
-        this.fullyOverlap =fullyOverlap;
+    constructor(characters: number, message: string){
+        this.numberOfCharacters = characters;
         this.stream = message;
     }
 }

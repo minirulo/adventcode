@@ -1,16 +1,11 @@
 import { Stack, Transaction } from "@domain/stack";
-import { IParser, ParseResult } from "@adapters/parser";
-
-
-class ParseError extends Error{
-    constructor(m?: string) {
-        super(m);
-    }
-}
+import { IParser, ParseResult, ParseError } from "@adapters/parser";
+import { ElfSupply } from "@domain/supplies";
 
 
 export class FileParser implements IParser {
     private readonly ACTIONS: {[key: string]: (stream: string) => ParseResult} = {
+        "ELFSUPPLY": FileParser.parseSupplyFile,
         "ELFDUTY": FileParser.parseDutyFile,
         "STACK": FileParser.parseStackFile,
         "DEVICE": (stream: string) => { return { parsedMessage: stream }; }
@@ -21,6 +16,20 @@ export class FileParser implements IParser {
             throw new ParseError("Allowed input types are ELFDUTY | STACK | DEVICE");
         }
         return this.ACTIONS[inputType](stream);
+    }
+
+    public static parseSupplyFile(stream: string): ParseResult  {
+        const supplies: Array<ElfSupply> = [];
+        let supply: ElfSupply = { calories: 0 };
+        for(const supplyChain of stream.split("\n")){
+            if(supplyChain == ""){
+                supplies.push(supply);
+                supply = { calories: 0 };
+            } else {
+                supply.calories += parseInt(supplyChain);
+            }
+        }
+        return { elfSupplies: supplies };
     }
 
     public static parseDutyFile(stream: string): ParseResult  {

@@ -1,11 +1,22 @@
 import 'module-alias/register';
 import express, { Request, Response } from 'express';
 import MessageBus from '@services/messagebus';
-import { CheckElfDuties, MoveCrates, ParseMessage } from '@domain/commands';
+import { CheckElfDuties, CheckElfSupplies, MoveCrates, ParseMessage } from '@domain/commands';
 
 export const router = express.Router()
 
-router.post('/elfs/:overlap', (req: Request, res: Response) => {
+router.post('/supplies/:elves', (req: Request, res: Response) => {
+    try {
+        const elves = parseInt(req.params.elves);
+        const stream =  req.body as string;
+        const bus = new MessageBus();
+        res.send({'result': bus.handle(new CheckElfSupplies(elves, stream))});
+    } catch(error){
+        res.status(400).send(error);
+    }
+});
+
+router.post('/elves/:overlap', (req: Request, res: Response) => {
     try {
         const fullyOverlap = req.params.overlap == 'true';
         const stream =  req.body as string;
