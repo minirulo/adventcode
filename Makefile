@@ -1,12 +1,18 @@
 #!/make
 
 build:
-	npm run start
+	npm run build
 
 run:
 	npm run start
 
-test:
+unit-test:
+	npm run unit-test
+
+integration-test:
+	npm run integration-test
+
+test: 
 	npm run test
 
 lint:

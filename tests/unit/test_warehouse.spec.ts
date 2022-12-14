@@ -1,4 +1,5 @@
-import { Stack, NotEnoughCratesError, WareHouse } from "@domain/stack";
+import { Stack, WareHouse } from "@domain/stack";
+import {NotEnoughCratesError} from "@domain/errors";
 
 describe("Test Day 5 - Stack", () =>{
     
@@ -58,14 +59,24 @@ describe("Test Day 5 - WareHouse", () =>{
         ];
     }
 
-    it("Test warehouse transaction", () => {
+    it("Test warehouse transaction with the CrateMover-9000", () => {
         const stacks = generate_stacks();
         
         const transaction = {"numberOfCrates": 2, "origin": stacks[0], "destination": stacks[1] }
-        WareHouse.transferCrates([transaction]);
+        WareHouse.transferCrates([transaction], 9000);
 
         expect(stacks[0].crates).toEqual([{"name": "M"}]);
         expect(stacks[1].crates).toEqual([{"name": "A"}, {"name": "E"}, {"name": "R"}, {"name": "N"}]);
+    });
+
+    it("Test warehouse transaction with the CrateMover-9001", () => {
+        const stacks = generate_stacks();
+        
+        const transaction = {"numberOfCrates": 2, "origin": stacks[0], "destination": stacks[1] }
+        WareHouse.transferCrates([transaction], 9001);
+
+        expect(stacks[0].crates).toEqual([{"name": "M"}]);
+        expect(stacks[1].crates).toEqual([{"name": "A"}, {"name": "E"}, {"name": "N"}, {"name": "R"}]);
     });
 
     it("Test warehouse last crates", () => {

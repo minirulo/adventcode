@@ -49,8 +49,17 @@ app.post('/device/:buffer', (req: Request, res: Response) => {
     }
 });
 
+app.post("/", (req: Request, res: Response) => {
+    console.log(req.files?.file);
+    res.send(req.files?.name);
+});
+
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)
 });
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
+var swaggerOptions = {
+    customCss: '.swagger-ui .topbar { display: none }'
+};
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi, swaggerOptions));

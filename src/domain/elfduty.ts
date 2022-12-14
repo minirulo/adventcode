@@ -13,7 +13,7 @@ export class ElfDuties {
         return [{"start": duty_a_start, "end": duty_a_end}, {"start": duty_b_start, "end": duty_b_end},];
     }
 
-    public static areElfsDutiesFullyOverlaping(elf_a: ElfDuty, elf_b: ElfDuty, fullOverlap = true): boolean {
+    public static areElfsDutiesOverlaping(elf_a: ElfDuty, elf_b: ElfDuty, fullOverlap = true): boolean {
         if(!fullOverlap){
             return ! ((elf_a.start > elf_b.end) || (elf_b.start > elf_a.end));
         }
@@ -31,7 +31,7 @@ export class ElfDuties {
         let overlappedDuties = 0;
         for(const dutyPairs of duties){
             const elfDuties = this.generateElfDuties(dutyPairs[0], dutyPairs[1], dutyPairs[2], dutyPairs[3]);
-            if(this.areElfsDutiesFullyOverlaping(elfDuties[0], elfDuties[1], fullOverlap)){
+            if(this.areElfsDutiesOverlaping(elfDuties[0], elfDuties[1], fullOverlap)){
                 overlappedDuties++;
             }
         }

@@ -10,8 +10,6 @@ export interface Transaction {
     destination: Stack;
 }
 
-
-
 export class Stack {
     private readonly _id: number;
     private _crates: Array<Crate>;
