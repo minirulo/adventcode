@@ -47,40 +47,23 @@
     }
   ],
   "paths": {
-    "/": {
-      "post": {
-        "tags": [
-          "test"
-        ],
-        "requestBody": {
-          "content": {
-            "text/plain": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Overlap"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/elfs": {
+    "/api/v1/elfs/{overlap}": {
       "post": {
         "tags": [
           "elf_duty"
         ],
+        "parameters": [
+          {
+            "name": "overlap",
+            "in": "path",
+            "description": "Whether to check for fully overlapped duties [true] or not [anything else]",
+            "required": false,
+            "default": "true",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "text/plain": {
@@ -105,10 +88,23 @@
         }
       }
     },
-    "/stacks": {
+    "/api/v1/stacks/{crateMover}": {
       "post": {
         "tags": [
           "warehouse_stack"
+        ],
+        "parameters": [
+          {
+            "name": "crateMover",
+            "in": "path",
+            "description": "Model of the CrateMover to use [ 9000 or 9001 ]",
+            "required": false,
+            "default": 9000,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -134,10 +130,23 @@
         }
       }
     },
-    "/device": {
+    "/api/v1/device/{length}": {
       "post": {
         "tags": [
           "device"
+        ],
+        "parameters": [
+          {
+            "name": "length",
+            "in": "path",
+            "description": "Length of the unique packet / message to look for in the message",
+            "required": false,
+            "default": 4,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         ],
         "requestBody": {
           "content": {
