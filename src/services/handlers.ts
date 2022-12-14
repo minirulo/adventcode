@@ -1,8 +1,9 @@
 import { IParser } from "@adapters/parser";
-import { CheckElfDuties, CheckElfSupplies, Command, MoveCrates, ParseMessage } from "@domain/commands";
+import { CheckElfDuties, CheckElfSupplies, Command, GetStrategyResult, MoveCrates, ParseMessage } from "@domain/commands";
 import { Device } from "@domain/device";
 import { ElfDuties } from "@domain/elfduty";
 import { Stack, Transaction, WareHouse } from "@domain/stack";
+import { RockPaperScissorsMatch } from "@domain/strategy";
 import { ElfSupply } from "@domain/supplies";
 
 export class Services {
@@ -14,6 +15,16 @@ export class Services {
             calories += sortedElves[e].calories;
         }
         return calories;
+    }
+
+    public static getStrategyResult(command: Command, parser: IParser): number {
+        const result = parser.parse(command.stream, "STRATEGY");
+        let total = 0;
+        for(const match of result.strategy as Array<RockPaperScissorsMatch>){
+            match.winningStrategy = (command as GetStrategyResult).winningStrategy;
+            total += match.score;
+        }
+        return total;
     }
 
     public static checkElfDuties(command: Command, parser: IParser): number {
@@ -37,7 +48,8 @@ export class Services {
 export type Handler = (command: Command, parser: IParser) => string | number;
 
 export const HANDLERS: { [key: string]: Handler } = {
-    "CheckElfSupplies": Services.checkElfSupplies,
+    "CheckElfSupplies": Services.checkElfSupplies,   
+    "GetStrategyResult": Services.getStrategyResult,
     "CheckElfDuties": Services.checkElfDuties,
     "MoveCrates": Services.moveCrates,
     "ParseMessage": Services.parseMessage

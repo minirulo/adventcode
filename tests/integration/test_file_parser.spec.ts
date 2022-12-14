@@ -1,8 +1,9 @@
 import { FileParser } from "@adapters/impl/file_parser";
 import { Stack, Transaction } from "@domain/stack";
+import { Choice, RockPaperScissorsMatch } from "@domain/strategy";
 import { readFileSync } from "fs";
 
-describe("Test Day 1 - Elf Duty parser", () => {
+describe("Test Day 1 - Elf Supply parser", () => {
     it("Test adapters parse input", async () => {
         const supplies = [
             { calories: 6000 },
@@ -12,7 +13,20 @@ describe("Test Day 1 - Elf Duty parser", () => {
             { calories: 10000 }
         ];
         const stream =  readFileSync("tests/dummy_data/example_supply.txt", "utf8");
-        expect(await FileParser.parseDutyFile(stream)).toEqual({elfSupplies: supplies });
+        expect(await FileParser.parseSupplyFile(stream)).toEqual({elfSupplies: supplies });
+    })
+});
+
+describe("Test Day 2 - Rock Paper Scissors Strategy", () => {
+    it("Test adapters parse input", async () => {
+        const matches = [
+            new RockPaperScissorsMatch(Choice.SCISSORS, Choice.PAPER),
+            new RockPaperScissorsMatch(Choice.PAPER, Choice.ROCK),
+            new RockPaperScissorsMatch(Choice.PAPER, Choice.ROCK),
+            new RockPaperScissorsMatch(Choice.ROCK, Choice.PAPER),
+        ];
+        const stream =  readFileSync("tests/dummy_data/example_strategy.txt", "utf8");
+        expect(await FileParser.parseStrategyFile(stream)).toEqual({strategy: matches });
     })
 });
 

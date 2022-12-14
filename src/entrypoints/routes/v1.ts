@@ -1,7 +1,7 @@
 import 'module-alias/register';
 import express, { Request, Response } from 'express';
 import MessageBus from '@services/messagebus';
-import { CheckElfDuties, CheckElfSupplies, MoveCrates, ParseMessage } from '@domain/commands';
+import { CheckElfDuties, CheckElfSupplies, GetStrategyResult, MoveCrates, ParseMessage } from '@domain/commands';
 
 export const router = express.Router()
 
@@ -11,6 +11,17 @@ router.post('/supplies/:elves', (req: Request, res: Response) => {
         const stream =  req.body as string;
         const bus = new MessageBus();
         res.send({'result': bus.handle(new CheckElfSupplies(elves, stream))});
+    } catch(error){
+        res.status(400).send(error);
+    }
+});
+
+router.post('/strategy/:winning', (req: Request, res: Response) => {
+    try {
+        const winningStrategy = req.params.winning == 'true';
+        const stream =  req.body as string;
+        const bus = new MessageBus();
+        res.send({'result': bus.handle(new GetStrategyResult(stream, winningStrategy))});
     } catch(error){
         res.status(400).send(error);
     }

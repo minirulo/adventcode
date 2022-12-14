@@ -1,6 +1,6 @@
 import { FakeParser } from ".";
 import MessageBus from "@services/messagebus";
-import { CheckElfSupplies, CheckElfDuties, MoveCrates, ParseMessage } from "@domain/commands";
+import { CheckElfSupplies, CheckElfDuties, MoveCrates, ParseMessage, GetStrategyResult } from "@domain/commands";
 
 describe('Test Service Handlers', () =>{
     it('Test max ammount of calories by one elf', ()=>{
@@ -15,6 +15,20 @@ describe('Test Service Handlers', () =>{
         const command = new CheckElfSupplies(3, "");
 
         expect(bus.handle(command)).toBe(45000);
+    })
+
+    it('Test score following assumed strategy', ()=>{
+        const bus = new MessageBus(new FakeParser());
+        const command = new GetStrategyResult("");
+
+        expect(bus.handle(command)).toBe(26);
+    })
+
+    it('Test score following winning strategy', ()=>{
+        const bus = new MessageBus(new FakeParser());
+        const command = new GetStrategyResult("", true);
+
+        expect(bus.handle(command)).toBe(18);
     })
 
     it('Test Check ElfDuties fully overlaped', ()=>{

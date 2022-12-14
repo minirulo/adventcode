@@ -27,6 +27,14 @@
       }
     },
     {
+      "name": "strategy",
+      "description": "Get the result of a perfect Rock Paper Scissors strategy",
+      "externalDocs": {
+        "description": "Puzzle",
+        "url": "https://adventofcode.com/2022/day/2"
+      }
+    },
+    {
       "name": "elf_duty",
       "description": "Check how many duties overlap when the elves pair with each other",
       "externalDocs": {
@@ -64,6 +72,47 @@
             "description": "Top number of elves to get the calories from.",
             "required": false,
             "default": 1,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/strategy/{winning}": {
+      "post": {
+        "tags": [
+          "strategy"
+        ],
+        "parameters": [
+          {
+            "name": "winning",
+            "in": "path",
+            "description": "Select wether to follow your instinct [false] or the winning strategy [true]",
+            "required": false,
+            "default": "false",
             "schema": {
               "type": "string"
             }

@@ -16,3 +16,9 @@ export class InvalidMessageError extends Error {
         super(m);
     }
 }
+
+export class InvalidMatchError extends Error {
+    constructor(m?: string) {
+        super(m);
+    }
+}

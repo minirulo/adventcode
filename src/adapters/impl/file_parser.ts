@@ -1,11 +1,17 @@
 import { Stack, Transaction } from "@domain/stack";
 import { IParser, ParseResult, ParseError } from "@adapters/parser";
 import { ElfSupply } from "@domain/supplies";
+import { Choice, RockPaperScissorsMatch } from "@domain/strategy";
 
+const STRATEGYCHOICES: { [key: string]: number }= {
+    "A": Choice.ROCK, "B": Choice.PAPER, "C": Choice.SCISSORS,
+    "X": Choice.ROCK, "Y": Choice.PAPER, "Z": Choice.SCISSORS
+};
 
 export class FileParser implements IParser {
     private readonly ACTIONS: {[key: string]: (stream: string) => ParseResult} = {
         "ELFSUPPLY": FileParser.parseSupplyFile,
+        "STRATEGY": FileParser.parseStrategyFile,
         "ELFDUTY": FileParser.parseDutyFile,
         "STACK": FileParser.parseStackFile,
         "DEVICE": (stream: string) => { return { parsedMessage: stream }; }
@@ -13,7 +19,7 @@ export class FileParser implements IParser {
 
     public parse(stream: string, inputType: string): ParseResult {
         if(!Object.keys(this.ACTIONS).includes(inputType)){
-            throw new ParseError("Allowed input types are ELFDUTY | STACK | DEVICE");
+            throw new ParseError("Allowed input types are ELFSUPPLY | STRATEGY | ELFDUTY | STACK | DEVICE");
         }
         return this.ACTIONS[inputType](stream);
     }
@@ -22,14 +28,25 @@ export class FileParser implements IParser {
         const supplies: Array<ElfSupply> = [];
         let supply: ElfSupply = { calories: 0 };
         for(const supplyChain of stream.split("\n")){
-            if(supplyChain == ""){
+            if((supplyChain == "")){
                 supplies.push(supply);
                 supply = { calories: 0 };
             } else {
                 supply.calories += parseInt(supplyChain);
             }
         }
+        if(supply.calories > 0){
+            supplies.push(supply);
+        }
         return { elfSupplies: supplies };
+    }
+
+    public static parseStrategyFile(stream: string): ParseResult  {
+        const matches: Array<RockPaperScissorsMatch> = [];
+        for(const match of stream.split("\n")){
+            matches.push(new RockPaperScissorsMatch(STRATEGYCHOICES[match[2]], STRATEGYCHOICES[match[0]]));
+        }
+        return { strategy: matches };
     }
 
     public static parseDutyFile(stream: string): ParseResult  {

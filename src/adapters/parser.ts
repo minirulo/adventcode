@@ -1,9 +1,11 @@
 
 import { Stack, Transaction } from "@domain/stack";
+import { RockPaperScissorsMatch } from "@domain/strategy";
 import { ElfSupply } from "@domain/supplies";
 
 export interface ParseResult {
     elfSupplies?: Array<ElfSupply>;
+    strategy?: Array<RockPaperScissorsMatch>;
     elfDuties?: Array<Array<number>>;
     stacks?: Array<Stack>;
     transactions?: Array<Transaction>;

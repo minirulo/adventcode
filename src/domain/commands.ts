@@ -14,6 +14,15 @@ export class CheckElfSupplies implements Command {
     }
 }
 
+export class GetStrategyResult implements Command {
+    public readonly stream: string;
+    public readonly winningStrategy: boolean;
+    constructor(message: string, winStrategy = false){
+        this.stream = message;
+        this.winningStrategy = winStrategy;
+    }
+}
+
 export class CheckElfDuties implements Command {
     public readonly fullyOverlap: boolean;
     public readonly stream: string;

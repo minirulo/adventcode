@@ -1,8 +1,9 @@
 import { IParser, ParseResult, ParseError } from "@adapters/parser";
 import { Stack, Transaction } from "@domain/stack";
+import { RockPaperScissorsMatch, Choice } from "@domain/strategy";
 
 export class FakeParser implements IParser {
-    public supplies = [
+    private readonly supplies = [
         { calories: 6000 },
         { calories: 4000 },
         { calories: 11000 },
@@ -10,7 +11,7 @@ export class FakeParser implements IParser {
         { calories: 10000 }
     ];
 
-    public duties = [
+    private readonly duties = [
         [2, 4, 6, 8],
         [2, 3, 4, 5],
         [5, 7, 7, 9],
@@ -19,10 +20,17 @@ export class FakeParser implements IParser {
         [2, 6, 4, 8]
     ];
 
-    public stacks = [
+    private readonly stacks = [
         new Stack(1, [{"name":"Z"}, {"name":"N"}]),
         new Stack(2, [{"name":"M"}, {"name":"C"},  {"name":"D"}]),
         new Stack(3, [{"name":"P"}]),
+    ];
+
+    private readonly strategies = [
+        new RockPaperScissorsMatch(Choice.SCISSORS, Choice.PAPER),
+        new RockPaperScissorsMatch(Choice.PAPER, Choice.ROCK),
+        new RockPaperScissorsMatch(Choice.PAPER, Choice.ROCK),
+        new RockPaperScissorsMatch(Choice.ROCK, Choice.PAPER),
     ];
 
     public transactions: Array<Transaction> = [
@@ -34,6 +42,7 @@ export class FakeParser implements IParser {
 
     private readonly ACTIONS: { [key: string]: ParseResult } = {
         "ELFSUPPLY": { elfSupplies: this.supplies },
+        "STRATEGY": { strategy: this.strategies },
         "ELFDUTY": { elfDuties: this.duties },
         "STACK": { stacks: this.stacks, transactions: this.transactions },
         "DEVICE": { parsedMessage: "mjqjpqmgbljsphdztnvjfqwrcgsmlb" }
@@ -41,8 +50,8 @@ export class FakeParser implements IParser {
 
     public parse(stream: string, inputType: string): ParseResult{
         if(!Object.keys(this.ACTIONS).includes(inputType)){
-            throw new ParseError("Allowed input types are ELFDUTY | STACK | DEVICE");
+            throw new ParseError("Allowed input types are ELFSUPPLY | STRATEGY | ELFDUTY | STACK | DEVICE");
         }
         return this.ACTIONS[inputType];
     }
-};
+}
