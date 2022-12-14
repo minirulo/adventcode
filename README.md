@@ -43,7 +43,7 @@ make run
 npm run start
 ```
 
-After that you can visit the [Open API](https://swagger.io/) file at http://localhost:8008.
+After that you can visit the [Open API](https://swagger.io/) file at http://localhost:8008/docs.
 
 #### Make
 
