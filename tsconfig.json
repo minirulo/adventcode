@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "CommonJS",
+    "paths": {
+      "@domain/*": [
+        "./src/domain/*"
+      ],
+      "@adapters/*": [
+        "./src/adapters/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@entrypoints/*": [
+        "./src/entrypoints/*"
+      ]
+    },
+    "types": [
+      "@types/jest",
+      "@types/express",
+      "node"
+    ],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "tests/**/*.spec.ts"]
+}
