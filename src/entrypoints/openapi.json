@@ -47,36 +47,7 @@
     }
   ],
   "paths": {
-    "/": {
-      "post": {
-        "tags": [
-          "test"
-        ],
-        "requestBody": {
-          "content": {
-            "text/plain": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Overlap"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/elfs/{overlap}": {
+    "/api/v1/elfs/{overlap}": {
       "post": {
         "tags": [
           "elf_duty"
@@ -117,7 +88,7 @@
         }
       }
     },
-    "/stacks/{crateMover}": {
+    "/api/v1/stacks/{crateMover}": {
       "post": {
         "tags": [
           "warehouse_stack"
@@ -159,7 +130,7 @@
         }
       }
     },
-    "/device/{length}": {
+    "/api/v1/device/{length}": {
       "post": {
         "tags": [
           "device"
