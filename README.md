@@ -11,6 +11,11 @@ To run the application you may either
 * Install [nodeenv](https://pypi.org/project/nodeenv/) which is a nice node virtual environment manager in [Python](https://www.python.org/)
     * Once you set it up, don't forget to activate the environment before start.
 
+Either way, install the node dependencies afterwards:
+```
+npm install
+```
+
 For the [GNU Make](https://www.gnu.org/software/make/) lovers, I have setup an easy to use `Makefile`.
 
 ### Build
