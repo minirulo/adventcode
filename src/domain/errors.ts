@@ -22,3 +22,21 @@ export class InvalidMatchError extends Error {
         super(m);
     }
 }
+
+export class CleanRucksackError extends Error {
+    constructor(m?: string) {
+        super(m);
+    }
+}
+
+export class InvalidCharacterError extends Error {
+    constructor(m?: string) {
+        super(m);
+    }
+}
+
+export class BadgeNotFoundError extends Error {
+    constructor(m?: string) {
+        super(m);
+    }
+}

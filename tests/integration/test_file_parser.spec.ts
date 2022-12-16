@@ -1,7 +1,8 @@
-import { FileParser } from "@adapters/impl/file_parser";
+import { StreamParser } from "@adapters/impl/stream_parser";
 import { Stack, Transaction } from "@domain/stack";
 import { Choice, RockPaperScissorsMatch } from "@domain/strategy";
 import { readFileSync } from "fs";
+import { Rucksack } from "@domain/rucksack";
 
 describe("Test Day 1 - Elf Supply parser", () => {
     it("Test adapters parse input", async () => {
@@ -13,7 +14,7 @@ describe("Test Day 1 - Elf Supply parser", () => {
             { calories: 10000 }
         ];
         const stream =  readFileSync("tests/dummy_data/example_supply.txt", "utf8");
-        expect(await FileParser.parseSupplyFile(stream)).toEqual({elfSupplies: supplies });
+        expect(await StreamParser.parseSupplyFile(stream)).toEqual({elfSupplies: supplies });
     })
 });
 
@@ -26,7 +27,22 @@ describe("Test Day 2 - Rock Paper Scissors Strategy", () => {
             new RockPaperScissorsMatch(Choice.ROCK, Choice.PAPER),
         ];
         const stream =  readFileSync("tests/dummy_data/example_strategy.txt", "utf8");
-        expect(await FileParser.parseStrategyFile(stream)).toEqual({strategy: matches });
+        expect(await StreamParser.parseStrategyFile(stream)).toEqual({strategy: matches });
+    })
+});
+
+describe("Test Day 2 - Rucksack Cleaning", () => {
+    it("Test adapters parse input", async () => {
+        const rucksacks = [
+            new Rucksack("vJrwpWtwJgWrhcsFMMfFFhFp"),
+            new Rucksack("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"),
+            new Rucksack("PmmdzqPrVvPwwTWBwg"),
+            new Rucksack("wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"),
+            new Rucksack("ttgJtRGJQctTZtZT"),
+            new Rucksack("CrZsJsPPZsGzwwsLwLmpwMDw"),
+        ];
+        const stream =  readFileSync("tests/dummy_data/example_rucksacks.txt", "utf8");
+        expect(await StreamParser.parseRucksackFile(stream)).toEqual({rucksacks: rucksacks });
     })
 });
 
@@ -41,7 +57,7 @@ describe("Test Day 4 - Elf Duty parser", () => {
             [2, 6, 4, 8]
         ];
         const stream =  readFileSync("tests/dummy_data/example_duty.txt", "utf8");
-        expect(await FileParser.parseDutyFile(stream)).toEqual({"elfDuties": duties });
+        expect(await StreamParser.parseDutyFile(stream)).toEqual({"elfDuties": duties });
     })
 });
 
@@ -61,6 +77,6 @@ describe("Test Day 5 - Warehouse parser", () => {
         ]
 
         const stream =  readFileSync("tests/dummy_data/example_warehouse.txt", "utf8");
-        expect(await FileParser.parseStackFile(stream)).toEqual({"stacks": stacks, "transactions": transactions});
+        expect(await StreamParser.parseStackFile(stream)).toEqual({"stacks": stacks, "transactions": transactions});
     })
 });

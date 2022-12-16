@@ -23,6 +23,13 @@ export class GetStrategyResult implements Command {
     }
 }
 
+export class GetRucksackPriority implements Command {
+    public readonly stream: string;
+    constructor(message: string){
+        this.stream = message;
+    }
+}
+
 export class CheckElfDuties implements Command {
     public readonly fullyOverlap: boolean;
     public readonly stream: string;

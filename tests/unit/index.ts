@@ -1,6 +1,7 @@
 import { IParser, ParseResult, ParseError } from "@adapters/parser";
 import { Stack, Transaction } from "@domain/stack";
 import { RockPaperScissorsMatch, Choice } from "@domain/strategy";
+import { Rucksack } from "@domain/rucksack";
 
 export class FakeParser implements IParser {
     private readonly supplies = [
@@ -9,6 +10,15 @@ export class FakeParser implements IParser {
         { calories: 11000 },
         { calories: 24000 },
         { calories: 10000 }
+    ];
+
+    private readonly rucksacks = [
+        new Rucksack("vJrwpWtwJgWrhcsFMMfFFhFp"),
+        new Rucksack("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"),
+        new Rucksack("PmmdzqPrVvPwwTWBwg"),
+        new Rucksack("wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"),
+        new Rucksack("ttgJtRGJQctTZtZT"),
+        new Rucksack("CrZsJsPPZsGzwwsLwLmpwMDw"),
     ];
 
     private readonly duties = [
@@ -43,6 +53,7 @@ export class FakeParser implements IParser {
     private readonly ACTIONS: { [key: string]: ParseResult } = {
         "ELFSUPPLY": { elfSupplies: this.supplies },
         "STRATEGY": { strategy: this.strategies },
+        "RUCKSACK": { rucksacks: this.rucksacks },
         "ELFDUTY": { elfDuties: this.duties },
         "STACK": { stacks: this.stacks, transactions: this.transactions },
         "DEVICE": { parsedMessage: "mjqjpqmgbljsphdztnvjfqwrcgsmlb" }
@@ -50,7 +61,7 @@ export class FakeParser implements IParser {
 
     public parse(stream: string, inputType: string): ParseResult{
         if(!Object.keys(this.ACTIONS).includes(inputType)){
-            throw new ParseError("Allowed input types are ELFSUPPLY | STRATEGY | ELFDUTY | STACK | DEVICE");
+            throw new ParseError(`Allowed input types are ${Object.keys(this.ACTIONS)}`);
         }
         return this.ACTIONS[inputType];
     }

@@ -2,6 +2,7 @@ import { IParser } from "@adapters/parser";
 import { CheckElfDuties, CheckElfSupplies, Command, GetStrategyResult, MoveCrates, ParseMessage } from "@domain/commands";
 import { Device } from "@domain/device";
 import { ElfDuties } from "@domain/elfduty";
+import { Prioritizer, Rucksack } from "@domain/rucksack";
 import { Stack, Transaction, WareHouse } from "@domain/stack";
 import { RockPaperScissorsMatch } from "@domain/strategy";
 import { ElfSupply } from "@domain/supplies";
@@ -27,6 +28,15 @@ export class Services {
         return total;
     }
 
+    public static getRucksackPriority(command: Command, parser: IParser): number {
+        const result = parser.parse(command.stream, "RUCKSACK");
+        let total = 0;
+        for(const rucksack of result.rucksacks as Array<Rucksack>){
+            total += Prioritizer.getRucksackPriority(rucksack);
+        }
+        return total;
+    }
+
     public static checkElfDuties(command: Command, parser: IParser): number {
         const result = parser.parse(command.stream, "ELFDUTY");
         return ElfDuties.countOverlapDuties(result.elfDuties as Array<Array<number>>, (command as CheckElfDuties).fullyOverlap)
@@ -48,7 +58,8 @@ export class Services {
 export type Handler = (command: Command, parser: IParser) => string | number;
 
 export const HANDLERS: { [key: string]: Handler } = {
-    "CheckElfSupplies": Services.checkElfSupplies,   
+    "CheckElfSupplies": Services.checkElfSupplies,
+    "GetRucksackPriority": Services.getRucksackPriority,
     "GetStrategyResult": Services.getStrategyResult,
     "CheckElfDuties": Services.checkElfDuties,
     "MoveCrates": Services.moveCrates,

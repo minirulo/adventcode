@@ -35,6 +35,14 @@
       }
     },
     {
+      "name": "rucksacks",
+      "description": "Clean the rucksack compartments",
+      "externalDocs": {
+        "description": "Puzzle",
+        "url": "https://adventofcode.com/2022/day/3"
+      }
+    },
+    {
       "name": "elf_duty",
       "description": "Check how many duties overlap when the elves pair with each other",
       "externalDocs": {
@@ -77,6 +85,36 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rucksacks": {
+      "post": {
+        "tags": [
+          "rucksacks"
+        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "text/plain": {
