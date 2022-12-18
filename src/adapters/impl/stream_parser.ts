@@ -1,26 +1,62 @@
 import { Stack, Transaction } from "@domain/stack";
-import { IParser, ParseResult } from "@adapters/parser";
+import { IParser, ParseResult, ParseError } from "@adapters/parser";
+import { ElfSupply } from "@domain/supplies";
+import { Choice, RockPaperScissorsMatch } from "@domain/strategy";
+import { Rucksack } from "@domain/rucksack";
 
+const STRATEGYCHOICES: { [key: string]: number }= {
+    "A": Choice.ROCK, "B": Choice.PAPER, "C": Choice.SCISSORS,
+    "X": Choice.ROCK, "Y": Choice.PAPER, "Z": Choice.SCISSORS
+};
 
-class ParseError extends Error{
-    constructor(m?: string) {
-        super(m);
-    }
-}
-
-
-export class FileParser implements IParser {
+export class StreamParser implements IParser {
     private readonly ACTIONS: {[key: string]: (stream: string) => ParseResult} = {
-        "ELFDUTY": FileParser.parseDutyFile,
-        "STACK": FileParser.parseStackFile,
+        "ELFSUPPLY": StreamParser.parseSupplyFile,
+        "RUCKSACK": StreamParser.parseRucksackFile,
+        "STRATEGY": StreamParser.parseStrategyFile,
+        "ELFDUTY": StreamParser.parseDutyFile,
+        "STACK": StreamParser.parseStackFile,
         "DEVICE": (stream: string) => { return { parsedMessage: stream }; }
     }
 
     public parse(stream: string, inputType: string): ParseResult {
         if(!Object.keys(this.ACTIONS).includes(inputType)){
-            throw new ParseError("Allowed input types are ELFDUTY | STACK | DEVICE");
+            throw new ParseError(`Allowed input types are ${Object.keys(this.ACTIONS)}`);
         }
         return this.ACTIONS[inputType](stream);
+    }
+
+    public static parseSupplyFile(stream: string): ParseResult  {
+        const supplies: Array<ElfSupply> = [];
+        let supply: ElfSupply = { calories: 0 };
+        for(const supplyChain of stream.split("\n")){
+            if((supplyChain == "")){
+                supplies.push(supply);
+                supply = { calories: 0 };
+            } else {
+                supply.calories += parseInt(supplyChain);
+            }
+        }
+        if(supply.calories > 0){
+            supplies.push(supply);
+        }
+        return { elfSupplies: supplies };
+    }
+
+    public static parseRucksackFile(stream: string): ParseResult {
+        const rucksacks: Array<Rucksack> = [];
+        for(const items of stream.split("\n")){
+            rucksacks.push(new Rucksack(items));
+        }
+        return { rucksacks: rucksacks };
+    }
+    
+    public static parseStrategyFile(stream: string): ParseResult  {
+        const matches: Array<RockPaperScissorsMatch> = [];
+        for(const match of stream.split("\n")){
+            matches.push(new RockPaperScissorsMatch(STRATEGYCHOICES[match[2]], STRATEGYCHOICES[match[0]]));
+        }
+        return { strategy: matches };
     }
 
     public static parseDutyFile(stream: string): ParseResult  {
@@ -74,9 +110,9 @@ export class FileParser implements IParser {
                 }
             }
             if(chain.startsWith("move")){
-                transactions.push(FileParser.parseTransactionChain(chain, stacks));
+                transactions.push(StreamParser.parseTransactionChain(chain, stacks));
             } else if(chain.length > 0) {
-                FileParser.parseStackChain(chain, stacks)
+                StreamParser.parseStackChain(chain, stacks)
             }
         }
         return { stacks: stacks, transactions: transactions};

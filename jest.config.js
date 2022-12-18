@@ -10,7 +10,7 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
-  testMatch:[ "**/tests/**/*.ts",],
+  testMatch:[ "**/tests/**/*.spec.ts",],
   coverageDirectory: "tests/.coverage-jest",
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' } )
 };
