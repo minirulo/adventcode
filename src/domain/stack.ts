@@ -61,14 +61,9 @@ export class WareHouse {
 
     public static lastCrates(stacks: Array<Stack>): string {
         stacks.sort((a, b) => {
-            if(a.id > b.id){
-                return 1;
-            } else if (a.id < b.id){
-                return -1;
-            }
-            return 0;
+            return a.id - b.id;
         });
-        let lastCrates = ""
+        let lastCrates = "";
         stacks.forEach(stack => {
             lastCrates += stack.lastCrate.name;
         });
