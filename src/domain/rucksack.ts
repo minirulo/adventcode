@@ -21,7 +21,7 @@ export class Rucksack {
 
     public getBadge(rucksacks: Array<Rucksack>): string {
         for(const c of this.items){
-            let badges = [];
+            const badges = [];
             for(const rucksack of rucksacks){
                 badges.push(rucksack.items.includes(c) ? c : '');
             }
@@ -35,7 +35,7 @@ export class Rucksack {
     public get items(){
         return this.compartmentA.concat(this.compartmentB);
     }
-};
+}
 
 export class Prioritizer {
     public static getRucksackPriority(rucksack: Rucksack): number {
@@ -57,4 +57,4 @@ export class Prioritizer {
         const unicodeCharacter = character.charCodeAt(0)
         return unicodeCharacter >= 97 ? unicodeCharacter - 96: unicodeCharacter - 38;
     }
-};
+}
